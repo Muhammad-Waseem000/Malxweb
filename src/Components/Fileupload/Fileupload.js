@@ -32,7 +32,7 @@ function Fileupload() {
             <div className='col-md-4'>
                 <div className='maxfilesize'>
                   <img src={scanner}/>
-                  <p>MAX FILE SIZE OF 1 GB</p>
+                  <p>MAX FILE SIZE OF 4 MB</p>
                 </div>
             </div>
             <div className='col-md-4'><Dragdrop /></div>

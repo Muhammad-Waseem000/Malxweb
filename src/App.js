@@ -1,4 +1,6 @@
 import logo from './logo.svg';
+// import React from 'react';
+
 import './App.css';
 import { Routes, Route } from "react-router-dom"
 import Befornav from './Components/Befornav';
@@ -21,6 +23,7 @@ import Scanhistory from './Components/Scanhistory/Scanhistory';
 function App() {
 
   const path=window.location.pathname;
+//   const [userEmail, setUserEmail] = React.useState('');
 
   return (
    <>
@@ -28,14 +31,18 @@ function App() {
 <Navbar />
    <Routes>
         <Route path="/" element={ <Home /> } />
+        {/* <UserContext.Provider value={{ userEmail, setUserEmail }}> */}
         <Route path="/signin" element={ <Signin /> } />
+        <Route path="/setting" element={ <Setting /> } />
+
+        {/* </UserContext.Provider> */}
+
         <Route path="/dashboard" element={ <Dashboard /> } />
         <Route path="/signup" element={ <Signup /> } />
         <Route path="/forgot" element={ <Forgot /> } />
         <Route path="/fileupload" element={ <Fileupload /> } />
         <Route path="/directoryscan" element={ <Directoryscan /> } />
         <Route path="/openhelp" element={ <Help /> } />
-        <Route path="/setting" element={ <Setting /> } />
         <Route path="/feedback" element={ <Feedback /> } />
         <Route path="/classfication" element={ <Cresult /> } />
         <Route path="/Qthreats" element={ <Qthreats /> } />

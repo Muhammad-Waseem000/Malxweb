@@ -1,4 +1,4 @@
-import React, { useState, useRef,useEffect  } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Directoryscan.css';
 import searchfile from '../../assets/icons/search-file.png';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,8 @@ function Directoryscan() {
   const [progress, setProgress] = useState(0);
   const [predictionResults, setPredictionResults] = useState({});
   const [validFilePaths, setValidFilePaths] = useState([]);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErorAlert] = useState(false);
 
   const opendirectory = () => {
     fileInputRef.current.click();
@@ -18,7 +20,7 @@ function Directoryscan() {
 
   const handleDirectoryChange = (event) => {
     const files = event.target.files;
-    console.log("total files: ",files.length)
+    console.log("total files: ", files.length)
     if (files.length > 0) {
       const directoryPath = files[0].webkitRelativePath;
       setSelectedDirectory(directoryPath);
@@ -37,12 +39,12 @@ function Directoryscan() {
       setValidFilePaths(validPaths);
     }
     // console.log("valid paths: ",validFilePaths.length)
-    
+
   };
   useEffect(() => {
     // This code will run after the component re-renders
     console.log("valid paths: ", validFilePaths.length);
-  }, [validFilePaths]); 
+  }, [validFilePaths]);
   const handleClick = async () => {
     if (selectedDirectory && validFilePaths.length > 0) {
       setIsLoading(true);
@@ -74,11 +76,27 @@ function Directoryscan() {
         setProgress(100);
 
         // Display results
+        // if (suspiciousFiles.length === 0) {
+        //   console.log('Scan complete, no suspicious files found');
+        // } else {
+        //   console.log('Suspicious files found:', suspiciousFiles);
+        // }
         if (suspiciousFiles.length === 0) {
-          console.log('Scan complete, no suspicious files found');
+          // No suspicious files found
+          // const successAlert = document.createElement('div');
+          // successAlert.className = 'alert alert-success';
+          // successAlert.setAttribute('role', 'alert');
+          // successAlert.innerText = 'Scan complete, no suspicious files found';
+
+          // // Append the alert to the document, or insert it into a specific element
+          // document.body.appendChild(successAlert);
+          setShowSuccessAlert(true);
         } else {
+          // Suspicious files found
           console.log('Suspicious files found:', suspiciousFiles);
+          setShowErorAlert(true);
         }
+
       }
     }
   };
@@ -116,12 +134,26 @@ function Directoryscan() {
 
     // Update the progress
     // console.log("prev progress: ",prevProgress)
-    setProgress((prevProgress) => (prevProgress+1)*(100 / validFilePaths.length));
+    setProgress((prevProgress) => (prevProgress + 1) * (100 / validFilePaths.length));
+  };
+
+   const handleButtonClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
     <>
       <Ctitle title="Directory Scan" />
+      {showSuccessAlert && (
+        <div className="alert alert-success" role="alert">
+          Scan complete, no suspicious files found
+        </div>
+      )}
+      {showErrorAlert && (
+        <div className="alert alert-danger" role="alert">
+          'Suspicious files found:',
+        </div>
+      )}
       <div className='container'>
         <div className='row'>
           <div className='col-md-4'></div>
@@ -129,14 +161,26 @@ function Directoryscan() {
             <img src={searchfile} style={{ width: '50%' }} />
             <br />
             <label htmlFor='directoryUpload'>Select Directory</label>
-            <input
+            {/* <input
               type='file'
               id='directoryUpload'
               webkitdirectory='true'
               directory='true'
               ref={fileInputRef}
               onChange={handleDirectoryChange}
+            /> */}
+
+            <input
+              type="file"
+              id='directoryUpload'
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleDirectoryChange}
+              directory="true"
+              webkitdirectory="true"
             />
+
+            <button onClick={handleButtonClick}>Choose Directory</button>
 
             {selectedDirectory && (
               <div>
@@ -196,3 +240,7 @@ function Directoryscan() {
 }
 
 export default Directoryscan;
+
+
+
+

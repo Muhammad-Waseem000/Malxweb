@@ -32,7 +32,7 @@ function Befornav() {
                     <Link to="/" className="link-style">Company</Link>&nbsp;&nbsp;&nbsp;&nbsp;
                     </li>
                     <li className="nav-item">
-                    <Link to="/signin" className="link-style">Sign In</Link>
+                    <Link to="/signin" className="link-style">Sign In for scanning</Link>
                     </li>
                 </ul>
             </div>
