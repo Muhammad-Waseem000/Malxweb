@@ -48,8 +48,8 @@ function Signin() {
         });
       }
     } catch (error) {
-      console.error('An error occurred:', error.message);
-      setAlert({ type: 'danger', message: `An error occurred: ${error.message}` });
+      console.error("Invalid Username or Password");
+      setAlert({ type: 'danger', message: `Invalid Username or Password` });
     }
   };
 

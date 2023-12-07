@@ -140,7 +140,7 @@ function Signup() {
     console.log('Data to be sent:', data); // Add this line for debugging
 
     try {
-      const apiURL = 'https://abidali1999063.pythonanywhere.com/signup_api';
+      const apiURL = 'https://abidali1999063.pythonanywhere.com/signup_api_web';
       const response = await axios.post(apiURL, data);
 
       console.log(response.status);

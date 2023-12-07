@@ -6,7 +6,7 @@ function FAQ() {
   <div className='container'>
     <div className='row' style={{marginTop:"40px"}}>
         <div className='col-md-12' style={{textAlign:"center"}}>
-                 <h1>FAQ</h1>
+                 <h1>FAQs</h1>
         </div>
     </div>
   </div>
