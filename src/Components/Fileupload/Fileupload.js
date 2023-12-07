@@ -7,15 +7,6 @@ import Ctitle from '../Ctitle/Ctitle';
 function Fileupload() {
   return (
     <div>
-      {/* <div className='container-fluid' style={{ background: "#eee", padding: "20px" }}>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-md-12'>
-              <h2>FILE UPLOAD</h2>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <Ctitle title="File Upload"/>
       <div className='container'>
         <div className='row'>

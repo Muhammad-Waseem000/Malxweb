@@ -65,26 +65,41 @@ function Directoryscan() {
     // Save the updated scan history back to local storage
     localStorage.setItem('scanHistory', JSON.stringify(existingScanHistory));
   };
+  // const calculateTimeDifference = (startTime, endTime) => {
+  //   if (startTime && endTime) {
+  //     const durationInMilliseconds = endTime - startTime;
+  //     const seconds = Math.floor(durationInMilliseconds / 1000);
+  //     const minutes = Math.floor(seconds / 60);
+  //     const formattedTime = `${minutes}m ${seconds % 60}s`;
+
+  //     return formattedTime;
+  //   }
+
+  //   return 'N/A';
+  // };
+
+
   const calculateTimeDifference = (startTime, endTime) => {
     if (startTime && endTime) {
       const durationInMilliseconds = endTime - startTime;
       const seconds = Math.floor(durationInMilliseconds / 1000);
       const minutes = Math.floor(seconds / 60);
       const formattedTime = `${minutes}m ${seconds % 60}s`;
-
+  
       return formattedTime;
     }
-
+  
     return 'N/A';
   };
-
+  
 
   useEffect(() => {
     console.log("valid paths: ", validFilePaths.length);
     setProgress((prevProgress) => prevProgress);
   }, [validFilePaths, progress]);
   const handleClick = async () => {
-    setScanStartTime(new Date());
+    setScanStartTime(new Date());  // Make sure this line is present and executed before the scan
+
     if (selectedDirectory && validFilePaths.length > 0) {
       setIsLoading(true);
       setProgress(0);
@@ -185,15 +200,8 @@ function Directoryscan() {
             <img src={searchfile} style={{ width: '50%' }} />
             <br />
             <label htmlFor='directoryUpload'>Select Directory</label>
-            {/* <input
-              type='file'
-              id='directoryUpload'
-              webkitdirectory='true'
-              directory='true'
-              ref={fileInputRef}
-              onChange={handleDirectoryChange}
-            /> */}
-             &nbsp;&nbsp;
+
+            &nbsp;&nbsp;
             <input
               type="file"
               id='directoryUpload'
@@ -203,7 +211,7 @@ function Directoryscan() {
               directory="true"
               webkitdirectory="true"
             />
-          
+
             <button className="btn btn-dark" onClick={handleButtonClick}>Choose Directory</button>
 
             {selectedDirectory && (
@@ -269,11 +277,15 @@ function Directoryscan() {
                     <p><strong>Date:</strong> {new Date().toLocaleString()}</p>
                     <p><strong>Total Files Scanned:</strong> {validFilePaths.length}</p>
                     <p><strong>Total Time Taken:</strong> {calculateTimeDifference(scanStartTime, new Date())}</p>
-                    {/* <p><strong>Threats Found:</strong> {Object.keys(predictionResults).filter(fileName => predictionResults[fileName] !== 'benign').join(', ')}</p> */}
                     <p>
-                      <strong>Threats Found:</strong> {Object.keys(predictionResults).filter(fileName => predictionResults[fileName] !== 'benign').length > 0
-                        ? Object.keys(predictionResults).filter(fileName => predictionResults[fileName] !== 'benign').join(', ')
-                        : '0 Threats Found'}
+                      <strong>Threats Found:</strong>{' '}
+                      {Object.keys(predictionResults).map(fileName => (
+                        <div key={fileName}>
+                          {predictionResults[fileName] !== 'benign' && (
+                            <div>{fileName} - {predictionResults[fileName]}</div>
+                          )}
+                        </div>
+                      ))}
                     </p>
                   </div>
                 )}

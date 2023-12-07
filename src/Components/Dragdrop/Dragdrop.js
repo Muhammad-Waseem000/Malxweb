@@ -57,9 +57,13 @@ function Dragdrop() {
     }
   };
 
+  const handleClose = () => {
+    setShowSuccessAlert(false);
+    setErrorAlert(false);
+  };
   return (
     <>
-      {showSuccessAlert && (
+      {/* {showSuccessAlert && (
         <div className="alert alert-success" role="alert">
           Predicted class: <strong>{result}</strong>
         </div>
@@ -68,7 +72,48 @@ function Dragdrop() {
         <div className="alert alert-danger" role="alert">
           Prediction failed. Please try again.
         </div>
-      )}
+      )} */}
+
+       {/* Success Modal */}
+       <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessAlert ? 'block' : 'none' }}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Success</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleClose}>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>Predicted class: <strong>{result}</strong></p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Error Modal */}
+      <div className="modal" tabIndex="-1" role="dialog" style={{ display: errorAlert ? 'block' : 'none' }}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Error</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleClose}>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>Prediction failed. Please try again.</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {!files && (
         <div className="dropzone" onDragOver={handledragover} onDrop={handledrop}>
           <h3>Drag & Drop files to upload</h3>

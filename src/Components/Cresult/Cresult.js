@@ -1,7 +1,6 @@
 // import React, { useState } from 'react';
 // import { Link } from 'react-router-dom';
 // import Ctitle from '../Ctitle/Ctitle';
-// import './Cresult.css';
 
 // function Cresult() {
 //   const [selectedScan, setSelectedScan] = useState(null);
@@ -39,7 +38,7 @@
 //               </thead>
 //               <tbody>
 //                 {scanHistory.map((scan, index) => (
-//                   <tr key={index} className="clickable-row" onClick={() => handleRowClick(index)}>
+//                   <tr key={index} onClick={() => handleRowClick(index)}>
 //                     <th scope="row">{index + 1}</th>
 //                     <td>{scan.directoryPath}</td>
 //                     <td>{scan.dateTime}</td>
@@ -61,30 +60,24 @@
 //                   </button>
 //                 </div>
 //                 <div className="modal-body">
-//                   {selectedScan && (
+//                   {selectedScan ? (
 //                     <div>
 //                       <p><strong>Directory:</strong> {selectedScan.directoryPath}</p>
 //                       <p><strong>Date:</strong> {selectedScan.dateTime}</p>
 //                       <p><strong>Total Files Scanned:</strong> {selectedScan.totalFilesScanned}</p>
 //                       <p><strong>Total Time Taken:</strong> {selectedScan.totalTimeTaken}</p>
-//                       <p><strong>Threats Found:</strong> {selectedScan.threatsFound.join(', ')}</p>
+//                       <p>
+//                         <strong>Threats Found:</strong>
+//                         {selectedScan.threatsFound && selectedScan.threatsFound.length > 0
+//                           ? selectedScan.threatsFound.join(', ')
+//                           : 'No Threats Found'}
+//                       </p>
+//                       {/* Add this debugging statement to show the entire threatsFound array */}
+//                       <p><strong>Threats Found Array:</strong> {JSON.stringify(selectedScan.threatsFound)}</p>
 //                     </div>
+//                   ) : (
+//                     <p>No scan selected</p>
 //                   )}
-//                   {/* {selectedScan && (
-//                     <div>
-//                       <p><strong>Directory:</strong> {selectedScan.directoryPath}</p>
-//                       <p><strong>Date:</strong> {selectedScan.dateTime}</p>
-//                       <p><strong>Total Files Scanned:</strong> {selectedScan.totalFilesScanned}</p>
-//                       <p><strong>Total Time Taken:</strong> {selectedScan.totalTimeTaken}</p>
-//                       <p><strong>Threats Found in Directory:</strong> {selectedScan.directoryPath}</p>
-//                       {selectedScan.threatsFound.length > 0 && (
-//                         <p><strong>Threats Found:</strong> {selectedScan.threatsFound.join(', ')}</p>
-//                       )}
-//                       {selectedScan.threatsFound.length === 0 && (
-//                         <p>No threats found.</p>
-//                       )}
-//                     </div>
-//                   )} */}
 //                 </div>
 //                 <div className="modal-footer">
 //                   <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={closeModal}>Close</button>
@@ -108,24 +101,28 @@
 // export default Cresult;
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Ctitle from '../Ctitle/Ctitle';
-import './Cresult.css';
 
 function Cresult() {
-  const [selectedScan, setSelectedScan] = useState(null);
+  const [scanHistory, setScanHistory] = useState([]);
 
-  const scanHistory = JSON.parse(localStorage.getItem('scanHistory')) || [];
+  useEffect(() => {
+    // Retrieve scan history from local storage
+    const storedScanHistory = JSON.parse(localStorage.getItem('scanHistory')) || [];
+    setScanHistory(storedScanHistory);
+  }, []);
+
+  const [selectedScan, setSelectedScan] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const handleRowClick = (index) => {
     // Set the selected scan when a row is clicked
     setSelectedScan(scanHistory[index]);
-    // Open the modal (you can implement this based on your needs)
+    // Open the modal
     setModalOpen(true);
   };
-
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const closeModal = () => {
     // Close the modal
@@ -136,9 +133,9 @@ function Cresult() {
     <>
       <Ctitle title="Classification Result" />
 
-      <div className='container'>
-        <div className='row'>
-          <div className='col-md-12'>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
             <table className="table">
               <thead>
                 <tr>
@@ -149,7 +146,7 @@ function Cresult() {
               </thead>
               <tbody>
                 {scanHistory.map((scan, index) => (
-                  <tr key={index} className="clickable-row" onClick={() => handleRowClick(index)}>
+                  <tr key={index} onClick={() => handleRowClick(index)}>
                     <th scope="row">{index + 1}</th>
                     <td>{scan.directoryPath}</td>
                     <td>{scan.dateTime}</td>
@@ -177,15 +174,13 @@ function Cresult() {
                       <p><strong>Date:</strong> {selectedScan.dateTime}</p>
                       <p><strong>Total Files Scanned:</strong> {selectedScan.totalFilesScanned}</p>
                       <p><strong>Total Time Taken:</strong> {selectedScan.totalTimeTaken}</p>
-                      {selectedScan.threatsFound.length > 0 && (
-                        <div>
-                          <p><strong>Threats Found in Directory:</strong> {selectedScan.directoryPath}</p>
-                          <p><strong>Threats Found:</strong> {selectedScan.threatsFound.join(', ')}</p>
-                        </div>
-                      )}
-                      {selectedScan.threatsFound.length === 0 && (
-                        <p>No threats found.</p>
-                      )}
+                      <p>
+                        <strong>Threats Found:</strong>{' '}
+                        {selectedScan.threatsFound && selectedScan.threatsFound.length > 0
+                          ? selectedScan.threatsFound.join(', ')
+                          : 'No Threats Found'}
+                      </p>
+
                     </div>
                   )}
                 </div>
@@ -197,10 +192,12 @@ function Cresult() {
           </div>
         )}
 
-        <div className='row'>
-          <div className='col-md-6'></div>
-          <div className='col-md-6 mt-3 mb-3' style={{ textAlign: "right" }}>
-            <Link className='btn btn-dark' to="/dashboard">Back</Link>
+        <div className="row">
+          <div className="col-md-6"></div>
+          <div className="col-md-6 mt-3 mb-3" style={{ textAlign: 'right' }}>
+            <Link className="btn btn-dark" to="/dashboard">
+              Back
+            </Link>
           </div>
         </div>
       </div>
@@ -209,5 +206,3 @@ function Cresult() {
 }
 
 export default Cresult;
-
-
